@@ -10,7 +10,7 @@ namespace SimpleCrud.Data
         {
             
         }
-        public DbSet<Store> Store { get; set; } = null!;
-        public DbSet<Product> Product { get; set; } = null!;
+        public DbSet<Store> Store { get; set; } 
+        public DbSet<Product> Product { get; set; } 
     }
 }

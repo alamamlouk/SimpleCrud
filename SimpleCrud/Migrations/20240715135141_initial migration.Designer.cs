@@ -12,7 +12,7 @@ using SimpleCrud.Data;
 namespace SimpleCrud.Migrations
 {
     [DbContext(typeof(ApplicationDBContext))]
-    [Migration("20240711180939_initial migration")]
+    [Migration("20240715135141_initial migration")]
     partial class initialmigration
     {
         /// <inheritdoc />
