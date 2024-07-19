@@ -1,81 +1,87 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using SimpleCrud.Data;
-using SimpleCrud.DTO.ProductDTO;
+using SimpleCrud.DTOs.ProductDTOs;
 using SimpleCrud.Interface.Products;
-using SimpleCrud.Mapper;
 using SimpleCrud.Models;
 
 namespace SimpleCrud.Services
 {
     public class ProductServices : IProductServices
-    {   
+    {
         private readonly ApplicationDBContext _context;
-        public ProductServices(ApplicationDBContext context)
+        private readonly IMapper _mapper;
+        public ProductServices(ApplicationDBContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
-        public async Task<List<Product>> GetAllProducts()=> await _context.Product.ToListAsync();
-        public async Task<AddProductResponseDTO> AddProduct(AddProductRequestDTO addProductRequestDTO){
-            if( addProductRequestDTO.ProductName == null || 
-                addProductRequestDTO.Price == 0 || 
-                addProductRequestDTO.ProductDescription == null || 
-                addProductRequestDTO.StoreId == null )
+        public async Task<List<GetProductResponse>> GetAllProducts()
+        {
+            var products = await _context.Product.ToListAsync();
+            return products.Select(p => _mapper.Map<GetProductResponse>(p)).ToList();
+        }
+        public async Task<AddProductResponse> AddProduct(AddProductRequest addProductRequest)
+        {
+
+            try
+            {
+                var newProduct = _context.Product.Add(_mapper.Map<Product>(addProductRequest));
+
+                await _context.SaveChangesAsync();
+
+                return _mapper.Map<AddProductResponse>(newProduct.Entity);
+            }
+            catch (System.Exception)
             {
                 return null;
             }
-            if( await _context.Store.FindAsync(addProductRequestDTO.StoreId) == null)
-            {
-                return null;
-            }
-            var newProduct = _context.Product.Add(addProductRequestDTO.DTOtoProduct());
             
-            await _context.SaveChangesAsync();
-           
-            return newProduct.Entity.ProductToAddProductResponseDTO(); ;
         }
-        
-        public async Task DeleteProduct (int ProductId)
+
+        public async Task<string> DeleteProduct(int ProductId)
         {
             var product = await _context.Product.FindAsync(ProductId);
-            if(product != null)
+           if (product == null)
             {
+                return "Product Not Found";
+            }
                 _context.Product.Remove(product);
                 await _context.SaveChangesAsync();
-            }
+            
+            return "Product Deleted";
         }
 
-        public async Task<FindProductResponseDTO> FindProductById(int ProductId)
-        {
-               var Product= await _context.Product.FindAsync(ProductId);
-            if(Product == null)
-                {
-                     return null;
-                }
-            return Product.ProductToFindProductResponseDTO();
-        
-        }
-
-        public async Task<UpdateProductResponseDTO> UpdateProduct(int ProductId, UpdateProductRequestDTO UpdateProductRequestDTO)
+        public async Task<GetProductResponse> FindProductById(int ProductId)
         {
             var product = await _context.Product.FindAsync(ProductId);
-
-            if( product == null)
+            if (product == null)
             {
                 return null;
             }
-            product.ProductName = UpdateProductRequestDTO.ProductName;
-            product.ProductDescription = UpdateProductRequestDTO.ProductDescription;
-            product.Price = UpdateProductRequestDTO.Price;
+            return _mapper.Map<GetProductResponse>(product);
+
+        }
+
+        public async Task<UpdateProductResponse> UpdateProduct(int ProductId, UpdateProductRequest updateProductRequest)
+        {
+            var product = await _context.Product.FindAsync(ProductId);
+
+            if (product == null)
+            {
+                return null;
+            }
+            product = _mapper.Map<Product>(updateProductRequest);
 
             _context.Product.Update(product);
             await _context.SaveChangesAsync();
-            return product.ProductToUpdateProductResponseDTO();
+            return _mapper.Map<UpdateProductResponse>(product);
         }
 
-        public async Task<Product> UpdateTheProductStoreId(int ProductId, int StoreId)
+        public async Task<UpdateProductResponse> UpdateTheProductStoreId(int ProductId, int StoreId)
         {
             var product = await _context.Product.FindAsync(ProductId);
-            if(product == null)
+            if (product == null)
             {
                 return null;
             }
@@ -87,7 +93,9 @@ namespace SimpleCrud.Services
             product.StoreId = StoreId;
             _context.Product.Update(product);
             await _context.SaveChangesAsync();
-            return product;
+            return _mapper.Map<UpdateProductResponse>(product);
         }
+
+        
     }
 }

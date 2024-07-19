@@ -1,10 +1,10 @@
-﻿namespace SimpleCrud.Models
+﻿namespace SimpleCrud.DTOs.StoreDTOs
 {
-    public class Store
+    public class AddStoreResponse
     {
         public int Id { get; set; }
         public string StoreName { get; set; }
         public string StoreOwner { get; set; }
-        public List <Product> Products { get; set; } 
+
     }
 }

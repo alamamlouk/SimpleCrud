@@ -1,15 +1,15 @@
-﻿using SimpleCrud.DTO.ProductDTO;
+﻿using SimpleCrud.DTOs.ProductDTOs;
 using SimpleCrud.Models;
 
 namespace SimpleCrud.Interface.Products
 {
     public interface IProductServices
     {
-        Task<List<Product>> GetAllProducts();
-        Task<AddProductResponseDTO> AddProduct(AddProductRequestDTO addProductRequestDTO);
-        Task DeleteProduct(int ProductId);
-        Task<FindProductResponseDTO> FindProductById(int ProductId);
-        Task<UpdateProductResponseDTO> UpdateProduct(int ProductId,UpdateProductRequestDTO UpdateProductRequestDTO);
-        Task<Product> UpdateTheProductStoreId(int ProductId, int StoreId);
+        Task<List<GetProductResponse>> GetAllProducts();
+        Task<AddProductResponse> AddProduct(AddProductRequest addProductRequest);
+        Task<string> DeleteProduct(int ProductId);
+        Task<GetProductResponse> FindProductById(int ProductId);
+        Task<UpdateProductResponse> UpdateProduct(int ProductId, UpdateProductRequest UpdateProductRequestDTO);
+        Task<UpdateProductResponse> UpdateTheProductStoreId(int ProductId, int StoreId);
     }
 }

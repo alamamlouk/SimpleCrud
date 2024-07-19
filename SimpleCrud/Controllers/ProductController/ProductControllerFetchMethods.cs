@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using SimpleCrud.DTO.ProductDTO;
 
-namespace SimpleCrud.Controllers.ProductController.ProductController
+namespace SimpleCrud.Controllers.ProductController
 {
 
     public partial class ProductController : ControllerBase

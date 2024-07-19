@@ -1,10 +1,8 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SimpleCrud.Data;
-using SimpleCrud.DTO.ProductDTO;
 using SimpleCrud.Services;
-
-namespace SimpleCrud.Controllers.ProductController.ProductController
+namespace SimpleCrud.Controllers.ProductController
 {
     [Route("api/product")]
     [ApiController]
@@ -17,4 +15,5 @@ namespace SimpleCrud.Controllers.ProductController.ProductController
         }
        
     }
+   
 }

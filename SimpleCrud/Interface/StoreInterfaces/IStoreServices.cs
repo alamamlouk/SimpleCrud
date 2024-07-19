@@ -1,15 +1,16 @@
-﻿using SimpleCrud.DTO.StoreDTO;
+﻿using SimpleCrud.DTOs;
+using SimpleCrud.DTOs.StoreDTOs;
 
 namespace SimpleCrud.Interface.Store
 {
     public interface IStoreServices
     {
-        public Task<FindStoreResponseDTO> FindStore(int StoreId);
-        public  Task<List<FindStoreResponseDTO>> GetAllStores();
-        public  Task<AddStoreResponseDTO> AddStore(AddStoreRequestDTO addStoreRequestDTO);
-        public Task<UpdateStoreResponseDTO> UpdateStore(int StoreId, UpdateStoreRequestDTO UpdateStoreRequestDTO);
-        public Task DeleteStore(int StoreId);
-        public Task EmptyStoreTable();
+        public Task<GetStoreResponse> FindStore(int StoreId);
+        public Task<List<GetStoreResponse>> GetAllStores();
+        public Task<AddStoreResponse> AddStore(AddStoreRequest storeRequest);
+        public Task<UpdateStoreResponse> UpdateStore(int StoreId,UpdateStoreRequest UpdateStoreRequest);
+        public Task<string> DeleteStore(int StoreId);
+        public Task<string> EmptyStoreTable();
 
 
 

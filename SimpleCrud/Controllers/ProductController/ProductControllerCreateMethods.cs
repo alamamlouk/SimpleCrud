@@ -1,8 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SimpleCrud.DTO.ProductDTO;
-
-namespace SimpleCrud.Controllers.ProductController.ProductController
+namespace SimpleCrud.Controllers.ProductController
 {
 
     public partial class ProductController : ControllerBase
@@ -11,7 +10,8 @@ namespace SimpleCrud.Controllers.ProductController.ProductController
         [HttpPost("AddProduct")]
         public async Task<IActionResult> AddProduct(AddProductRequestDTO AddProductRequestDTO)
         {
-            return _productServices.AddProduct(AddProductRequestDTO) == null ? NotFound() : Ok("Product Added");
+            return await _productServices.AddProduct(AddProductRequestDTO) == null ? NotFound() : Ok("Product Added");
         }
     }
+  
 }

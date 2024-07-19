@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SimpleCrud.DTO.ProductDTO;
 
-namespace SimpleCrud.Controllers.ProductController.ProductController
+namespace SimpleCrud.Controllers.ProductController
 {
-    public partial class ProductController: ControllerBase
+    public partial class ProductController : ControllerBase
     {
         [HttpPut("UpdateProduct/{ProductId}")]
         public async Task<IActionResult> UpdateProduct(int ProductId, UpdateProductRequestDTO UpdateProductRequestDTO)

@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Hosting;
 using SimpleCrud.Models;
 
 namespace SimpleCrud.Data
@@ -10,6 +11,8 @@ namespace SimpleCrud.Data
         {
             
         }
+
+
         public DbSet<Store> Store { get; set; } 
         public DbSet<Product> Product { get; set; } 
     }
