@@ -2,7 +2,7 @@
 using SimpleCrud.DTOs;
 using SimpleCrud.DTOs.ProductDTOs;
 using SimpleCrud.DTOs.StoreDTOs;
-using SimpleCrud.Models;
+using SimpleCrud.Entity;
 
 namespace SimpleCrud.Mapper
 {

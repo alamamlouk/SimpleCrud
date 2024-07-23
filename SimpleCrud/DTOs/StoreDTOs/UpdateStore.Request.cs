@@ -1,8 +1,11 @@
-﻿namespace SimpleCrud.DTOs.StoreDTOs
+﻿using System.Security.Cryptography.X509Certificates;
+
+namespace SimpleCrud.DTOs.StoreDTOs
 {
     public class UpdateStoreRequest
     {
-        public string StoreName { get; set; }
-        public string StoreOwner { get; set; }
+        public string Name { get; set; }
+        public string Owner { get; set; }
+
     }
 }

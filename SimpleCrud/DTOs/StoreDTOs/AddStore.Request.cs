@@ -2,7 +2,8 @@
 {
     public class AddStoreRequest
     {
-        public string StoreName { get; set; }
-        public string StoreOwner { get; set; }
+        public string Name { get; set; }
+        public string Owner { get; set; }
+      
     }
 }

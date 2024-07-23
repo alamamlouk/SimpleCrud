@@ -3,84 +3,120 @@ using Microsoft.EntityFrameworkCore;
 using SimpleCrud.Data;
 using SimpleCrud.DTOs;
 using SimpleCrud.DTOs.StoreDTOs;
+using SimpleCrud.Entity;
 using SimpleCrud.Interface.Store;
-using SimpleCrud.Mapper;
-using SimpleCrud.Models;
 
 namespace SimpleCrud.Services
 {
     public class StoreServices : IStoreServices
     {
+        #region Local variables + Constructor
+
         private readonly ApplicationDBContext _context;
         private readonly IMapper _mapper;
-        public StoreServices(ApplicationDBContext context,IMapper mapper)
+        public StoreServices(ApplicationDBContext context, IMapper mapper)
         {
-
             _mapper = mapper;
             _context = context;
         }
+
+        #endregion
+
+        #region Main Methods
+
+        #region Find Store
         public async Task<GetStoreResponse> FindStore(int StoreId)
         {
+            return _mapper.Map<GetStoreResponse>(
+                await _context.Store
+                .Include(s => s.Products)
+                .FirstOrDefaultAsync(s => s.Id == StoreId));
+        }
+        #endregion
 
-            var foundStore = await _context.Store.Include(s => s.Products).FirstOrDefaultAsync(s => s.Id == StoreId);
-            if (foundStore == null)
+        #region GetAllStores
+        public async Task<List<GetStoreResponse>> GetAllStores(int page=1,int pageSize = 1)
+        {
+            return (await _context.Store
+                .Include(s => s.Products)
+                .Skip((page-1)*pageSize)
+                .Take(pageSize)
+                .ToListAsync())
+                .Select(s => _mapper.Map<GetStoreResponse>(s))
+                .ToList();
+        }
+        #endregion
+
+        #region AddStore
+        public async Task<AddStoreResponse> AddStore(AddStoreRequest addStoreRequest)
+        {
+            if(addStoreRequest.Owner == null || addStoreRequest.Name == null)
             {
                 return null;
             }
+            Store newStore = _context.Store.Add(_mapper.Map<Store>(addStoreRequest)).Entity;
+            await _context.SaveChangesAsync();
+            return _mapper.Map<AddStoreResponse>(newStore);
             
-            return _mapper.Map<GetStoreResponse>(foundStore);
-            
-       
+           
+
         }
-        public async Task<List<GetStoreResponse>> GetAllStores()
-        {
-            // ASK how to minimize this section
+        #endregion
 
-            var stores = await _context.Store.Include(s=>s.Products).ToListAsync();
-            List<GetStoreResponse> newStores= stores.Select(s=> _mapper.Map<GetStoreResponse>(s)).ToList();
-            return newStores;
-        }
-
-
-        public async Task<AddStoreResponse> AddStore(AddStoreRequest addStoreRequest)
-        {
-                var newStore = _context.Store.Add(_mapper.Map<Store>(addStoreRequest));
-                await _context.SaveChangesAsync();
-                return _mapper.Map<AddStoreResponse>(newStore.Entity);
-          
-        }
-
-
+        #region updateStore
         public async Task<UpdateStoreResponse> UpdateStore(int StoreId, UpdateStoreRequest updateStoreRequest)
         {
-            Store findStore = await _context.Store.FindAsync(StoreId);
+            Store findStore = await _context.Store.Include(s => s.Products).FirstOrDefaultAsync(s => s.Id == StoreId);
             if (findStore == null)
             {
                 return null;
             }
-            findStore.StoreOwner = updateStoreRequest.StoreOwner;
-            findStore.StoreName = updateStoreRequest.StoreName;
+            findStore.Owner = updateStoreRequest.Owner??findStore.Owner;
+            findStore.Name = updateStoreRequest.Name??findStore.Name;
             _context.Store.Update(findStore);
             await _context.SaveChangesAsync();
             return _mapper.Map<UpdateStoreResponse>(findStore);
         }
-        public async Task<string> DeleteStore(int StoreId)
-        {
-            var store = await _context.Store.FindAsync(StoreId);
-            if (store == null)
-            {
-                return "no Store found with the Id ";
-            }
-            _context.Store.Remove(store);
-            await _context.SaveChangesAsync();
-            return "Store Deleted Successfully";    
-         }
-        public async Task<string> EmptyStoreTable()
-        {
-            _context.Store.RemoveRange(_context.Store);
-            await _context.SaveChangesAsync();
-            return "Store Table Emptied";
-        }
+        #endregion
 
+        #region delete Store
+        public async Task<bool> DeleteStore(int StoreId)
+        {
+            try
+            {
+                Store store = await _context.Store.FindAsync(StoreId);
+                if (store == null)
+                {
+                    return false;
+                }
+                _context.Store.Remove(store);
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+        #endregion
+
+        #region empty table
+        public async Task<bool> EmptyStoreTable()
+        {
+            try
+            {
+                _context.Store.RemoveRange(_context.Store);
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+        #endregion
+        #endregion
+
+     
     }
 }

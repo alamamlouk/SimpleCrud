@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Hosting;
-using SimpleCrud.Models;
+using SimpleCrud.Entity;
 
 namespace SimpleCrud.Data
 {
@@ -9,7 +9,16 @@ namespace SimpleCrud.Data
         public ApplicationDBContext( DbContextOptions<ApplicationDBContext> options)
         : base(options)
         {
-            
+          
+        }
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Store>()
+                .HasMany(s => s.Products)
+                .WithOne(p => p.Store)
+                .HasForeignKey(p => p.StoreId)
+                .OnDelete(DeleteBehavior.Cascade);
+
         }
 
 
