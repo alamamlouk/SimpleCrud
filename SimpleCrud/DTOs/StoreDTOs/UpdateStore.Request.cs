@@ -4,8 +4,8 @@ namespace SimpleCrud.DTOs.StoreDTOs
 {
     public class UpdateStoreRequest
     {
-        public string Name { get; set; }
-        public string Owner { get; set; }
+        public string? Name { get; set; }
+        public string? Owner { get; set; }
 
     }
 }

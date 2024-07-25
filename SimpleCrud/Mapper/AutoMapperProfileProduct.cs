@@ -6,23 +6,14 @@ using SimpleCrud.Entity;
 
 namespace SimpleCrud.Mapper
 {
-    public class AutoMapperProfile : Profile
+    public class AutoMapperProfileProduct : Profile
     {
-        public AutoMapperProfile()
-        {
-            //Store Mapping
-            CreateMap<Store, GetStoreResponse>();
-            CreateMap<AddStoreRequest, Store>();
-            CreateMap<Store, AddStoreResponse>();
-            CreateMap<UpdateStoreRequest, Store>();
-            CreateMap<Store, UpdateStoreResponse>();
-            //Product Mapping
+        public AutoMapperProfileProduct(){
             CreateMap<Product, GetProductResponse>();
             CreateMap<AddProductRequest, Product>();
             CreateMap<Product, AddProductResponse>();
             CreateMap<UpdateProductRequest, Product>();
             CreateMap<Product, UpdateProductResponse>();
-
         }
     }
 }

@@ -1,6 +1,6 @@
 ﻿using SimpleCrud.DTOs.ProductDTOs;
 
-namespace SimpleCrud.DTOs
+namespace SimpleCrud.DTOs.StoreDTOs
 {
     public class UpdateStoreResponse
     { 

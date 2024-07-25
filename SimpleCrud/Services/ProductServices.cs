@@ -24,20 +24,18 @@ namespace SimpleCrud.Services
 
         #region FindProductById
         public async Task<GetProductResponse> FindProductById(int Id)=>
-                    _mapper.Map<GetProductResponse>(
-                      await _context.Product
-                     .FindAsync(Id));
-        
+                    _mapper.Map<GetProductResponse>(await _context.Product
+                                                                  .FindAsync(Id));
         #endregion
 
         #region GetAllProducts
         public async Task<List<GetProductResponse>> GetAllProducts(int page=1,int pageSize=10)=>
             (await _context.Product
-                    .Skip((page-1)* pageSize)
-                    .Take(pageSize)
-                    .ToListAsync())
-                    .Select(p => _mapper.Map<GetProductResponse>(p))
-                    .ToList();
+                           .Skip((page-1)* pageSize)
+                           .Take(pageSize)
+                           .ToListAsync())
+                           .Select(p => _mapper.Map<GetProductResponse>(p))
+                           .ToList();
         
         #endregion
 
@@ -46,7 +44,9 @@ namespace SimpleCrud.Services
         {
             if(await _context.Store.FindAsync(addProductRequest.StoreId)==null)
                 return null;
-            if(addProductRequest.Name == null || addProductRequest.Description == null || addProductRequest.Price==0)
+            if( addProductRequest.Name == null ||
+                addProductRequest.Description == null ||
+                addProductRequest.Price==0)
                 return null;
             Product newProduct = _context.Product.Add(_mapper.Map<Product>(addProductRequest)).Entity;
             await _context.SaveChangesAsync();

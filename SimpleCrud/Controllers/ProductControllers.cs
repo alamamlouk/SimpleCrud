@@ -31,7 +31,7 @@ namespace SimpleCrud.Controllers
         public async Task<IActionResult> FindProductById(int ProductId)
         {
             GetProductResponse product = await _productServices.FindProductById(ProductId);
-            return product == null ? NotFound() : Ok(product);
+            return product == null ? NotFound("Product not found") : Ok(product);
         }
         #endregion
 

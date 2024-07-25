@@ -18,9 +18,7 @@ namespace SimpleCrud.Data
                 .WithOne(p => p.Store)
                 .HasForeignKey(p => p.StoreId)
                 .OnDelete(DeleteBehavior.Cascade);
-
         }
-
 
         public DbSet<Store> Store { get; set; } 
         public DbSet<Product> Product { get; set; } 
